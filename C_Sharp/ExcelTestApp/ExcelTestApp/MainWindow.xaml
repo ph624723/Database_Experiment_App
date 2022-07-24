@@ -1,0 +1,180 @@
+﻿<Window x:Class="ExcelTestApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExcelTestApp"
+        mc:Ignorable="d"
+        lex:LocalizeDictionary.DesignCulture="de"
+        lex:ResxLocalizationProvider.DefaultAssembly="ExcelTestApp"
+        lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+        Title="{lex:Loc MainWindowTitle}" Height="1000" Width="1700" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:views="clr-namespace:ExcelTestApp.Views"
+        xmlns:utilities="clr-namespace:ExcelTestApp.Utilities"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Closing="MainWindow_OnClosing"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <materialDesign:PackIcon x:Key="ThreeDotsIcon" Kind="EllipsisVertical" Foreground="White" Width="22" Height="22" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <materialDesign:PackIcon x:Key="ChangeUserIcon" Kind="AccountArrowRight" />
+        <materialDesign:PackIcon x:Key="SaveIcon" Kind="ContentSaveOutline" Foreground="White"/>
+        <materialDesign:PackIcon x:Key="SaveAsIcon" Kind="FileDocumentBoxMultipleOutline" Foreground="White"/>
+    </Window.Resources>
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <materialDesign:DrawerHost x:Name="LoginDrawerHost" Grid.Row="0" IsTopDrawerOpen="{Binding Path=IsLoginDrawerOpen}">
+            <materialDesign:DrawerHost.TopDrawerContent>
+                <Grid Background="{DynamicResource MaterialDesignBackground}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" Background="{DynamicResource MaterialDesignBackground}" Visibility="{Binding LoginPanelVisible}">
+                        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" HorizontalAlignment="Center" Margin="10" Text="{lex:Loc Login}"></TextBlock>
+                        <ComboBox
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                materialDesign:HintAssist.Hint="{lex:Loc SelectUser}"
+                                IsEditable="True"
+                                VerticalAlignment="Center"
+                                Width="400"
+                                Margin="10"
+                                ItemsSource="{Binding SelectableUsers}"
+                                SelectedValue="{Binding SelectedUser}"
+                                DisplayMemberPath="NameAndMail">
+                            </ComboBox>
+                            <PasswordBox
+                                x:Name="PasswordBox"
+                                Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                VerticalAlignment="Center"
+                                Width="400"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="{lex:Loc Password}" 
+                                />
+                        <Grid HorizontalAlignment="Stretch">
+                            <Button 
+                                x:Name="StartNewUserButton"
+                                Content="{lex:Loc CreateUser}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Margin="10"
+                                Background="LightGray"
+                                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                BorderBrush="LightGray"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                Click="StartNewUserButton_OnClick"/>
+                            <Button 
+                                x:Name="ConfirmLoginButton"
+                                Content="{lex:Loc Continue}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Margin="10"
+                                Click="ConfirmLoginButton_OnClick"/>
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" Background="{DynamicResource MaterialDesignBackground}" Visibility="{Binding NewUserPanelVisible}">
+                        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" HorizontalAlignment="Center" Margin="10" Text="{lex:Loc NewUser}"></TextBlock>
+                        <TextBox
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            VerticalAlignment="Center"
+                            Width="400"
+                            Margin="10"
+                            materialDesign:HintAssist.Hint="{lex:Loc UserName}"
+                            Text="{Binding NewUserName}">
+                        </TextBox>
+                        <StackPanel Orientation="Horizontal ">
+                            <TextBox
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                VerticalAlignment="Center"
+                                Width="340"
+                                Margin="10,10,0,10"
+                                materialDesign:HintAssist.Hint="{lex:Loc EMailAddress}"
+                                Text="{Binding NewUserMail}">
+                            </TextBox>
+                            <TextBlock 
+                                Foreground="DarkGray" 
+                                Text="@mail.de"
+                                Margin="0,16,10,4"
+                                VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <PasswordBox
+                            x:Name="NewPasswordBox1"
+                                Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                VerticalAlignment="Center"
+                                Width="400"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="{lex:Loc Password}" />
+                        <PasswordBox
+                            x:Name="NewPasswordBox2"
+                            Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                            VerticalAlignment="Center"
+                            Width="400"
+                            Margin="10"
+                            materialDesign:HintAssist.Hint="{lex:Loc RepeatPassword}" />
+                        <Grid HorizontalAlignment="Stretch">
+                            <Button 
+                                x:Name="AbortNewUserButton"
+                                Content="{lex:Loc Abort}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Margin="10"
+                                Background="LightGray"
+                                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                BorderBrush="LightGray"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                Click="AbortNewUserButton_OnClick"/>
+                            <Button 
+                                x:Name="ConfirmNewUserButton"
+                                Content="{lex:Loc Confirm}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Margin="10"
+                                Click="ConfirmNewUserButton_OnClick"/>
+                        </Grid>
+                    </StackPanel>
+                    <Grid Grid.Row="1" Height="1" Background="LightGray"></Grid>
+                </Grid>
+            </materialDesign:DrawerHost.TopDrawerContent>
+        </materialDesign:DrawerHost>
+        <materialDesign:DialogHost IsOpen="{Binding IsLoginDrawerOpen}" Grid.Row="1" CloseOnClickAway="False">
+            <Grid IsEnabled="{Binding MainviewEnabled}" Background="{DynamicResource MaterialDesignBackground}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" HorizontalAlignment="Stretch" Background="{DynamicResource PrimaryHueMidBrush}" Margin="0,0,0,-1">
+                        <Menu Background="Transparent" Margin="0" Height="30" VerticalAlignment="Top">
+                            <MenuItem x:Name="SaveAsButton" Height="30" Width="50" Icon="{StaticResource SaveAsIcon}" ToolTip="{lex:Loc SaveAs}" Click="SaveAsButton_OnClick"/>
+                            <MenuItem x:Name="SaveButton" Height="30" Width="50" Icon="{StaticResource SaveIcon}" ToolTip="{lex:Loc Save}" Click="SaveButton_OnClick"/>
+                        </Menu>
+                        <TextBlock Text="{Binding CurrentUserText, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="LightGray" Style="{DynamicResource MaterialDesignTitleTextBlock }" FontSize="10"/>
+                    </Grid>
+                    <views:MainView x:Name="MainView"
+                            Grid.Row="1"/>
+                </Grid>
+                <Menu Background="Transparent" Margin="0" Height="69" Width="55" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <MenuItem Height="69" Width="55" Icon="{StaticResource ThreeDotsIcon}">
+                        <MenuItem x:Name="ChangeUserButton" Header="{lex:Loc ChangeUser}" Icon="{StaticResource ChangeUserIcon}" Background="{DynamicResource MaterialDesignBackground}" Click="ChangeUserButton_OnClick"></MenuItem>
+                        <MenuItem Header="{lex:Loc ChangeLanguage}" Background="{DynamicResource MaterialDesignBackground}">
+                            <MenuItem x:Name="ChangeToGerman" Header="Deutsch" Click="ChangeToGerman_OnClick" Background="{DynamicResource MaterialDesignBackground}"/>
+                            <MenuItem x:Name="ChangeToEnglish" Header="English" Click="ChangeToEnglish_OnClick" Background="{DynamicResource MaterialDesignBackground}"></MenuItem>
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+            </Grid>
+        </materialDesign:DialogHost>
+    </Grid>
+</Window>

@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="ExcelTestApp.Views.Controls.Filter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExcelTestApp.Views.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid x:Name="Grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+
+        </StackPanel>
+        <Grid Grid.Row="1" Background="{DynamicResource MaterialDesignSelection}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                x:Name="NewFilterButton"
+                Style="{StaticResource MaterialDesignFloatingActionButton}"
+                ToolTip="{lex:Loc AddNewFilter}"
+                Width="30"
+                Height="30"
+                Margin="20,10,10,10"
+                VerticalAlignment="Center"
+                Visibility="{Binding NewFilterButtonVisible, Mode=OneWay}"
+                Click="NewFilterButton_OnClick">
+                <materialDesign:PackIcon
+                    Kind="Plus"
+                    Height="20"
+                    Width="20" />
+            </Button>
+            <Button
+                Grid.Column="0"
+                x:Name="AbortNewFilterButton"
+                Style="{StaticResource MaterialDesignFloatingActionButton}"
+                ToolTip="{lex:Loc Abort}"
+                Width="30"
+                Height="30"
+                Margin="20,10,10,10"
+                VerticalAlignment="Center"
+                Visibility="{Binding AbortNewFilterButtonVisible, Mode=OneWay}"
+                Click="AbortNewFilterButton_OnClick">
+                <materialDesign:PackIcon
+                    Kind="Close"
+                    Height="20"
+                    Width="20" />
+            </Button>
+            <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding NewFilterOpen, Mode=OneWay}" Grid.Column="1">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                    <StackPanel Orientation="Horizontal" Background="{DynamicResource MaterialDesignSelection}">
+                    
+                    <ComboBox
+                x:Name="SelectedFieldComboBox"
+                materialDesign:HintAssist.Hint="{lex:Loc SelectField}"
+                MinWidth="150"
+                Margin="10"
+                ItemsSource="{Binding AvailableFields}"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                VerticalAlignment="Center"
+                        IsEnabled="{Binding SelectedFieldComboBoxEnabled, Mode=OneWay}"
+                        SelectedValue="{Binding SelectedField}"
+                        SelectionChanged="SelectedFieldComboBox_OnSelectionChanged">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
+                        <ComboBox
+                x:Name="SelectedKindComboBox"
+                materialDesign:HintAssist.Hint="{lex:Loc SelectFilterKind}"
+                MinWidth="150"
+                Margin="10"
+                ItemsSource="{Binding AvailableKinds}"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                VerticalAlignment="Center"
+                        Visibility="{Binding SelectedKindComboBoxVisible, Mode=OneWay}"
+                        IsEnabled="{Binding SelectedKindComboBoxEnabled, Mode=OneWay}"
+                        SelectedValue="{Binding SelectedKind}"
+                        SelectionChanged="SelectedKindComboBox_OnSelectionChanged">
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>
+                    </StackPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+        </materialDesign:DrawerHost>
+            </Grid>
+    </Grid>
+</UserControl>

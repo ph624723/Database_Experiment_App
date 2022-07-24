@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="ExcelTestApp.Views.Dialogs.UserDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExcelTestApp.Views.Dialogs"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Margin="10">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Background="{DynamicResource MaterialDesignBackground}" Visibility="{Binding NewUserPanelVisible}">
+        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" HorizontalAlignment="Center" Margin="10" Text="{lex:Loc EditUser}"></TextBlock>
+        <TextBox
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            VerticalAlignment="Center"
+                            Width="400"
+                            Margin="10"
+                            materialDesign:HintAssist.Hint="{lex:Loc UserName}"
+                            Text="{Binding UserName}">
+        </TextBox>
+        <StackPanel Orientation="Horizontal ">
+            <TextBox
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                VerticalAlignment="Center"
+                                Width="340"
+                                Margin="10,10,0,10"
+                                materialDesign:HintAssist.Hint="{lex:Loc EMailAddress}"
+                                Text="{Binding UserMailText}">
+            </TextBox>
+            <TextBlock 
+                                Foreground="DarkGray" 
+                                Text="@mail.de"
+                                Margin="0,16,10,4"
+                                VerticalAlignment="Center"/>
+        </StackPanel>
+        <PasswordBox
+                            x:Name="PasswordBox1"
+                                Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                VerticalAlignment="Center"
+                                Width="400"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="{lex:Loc Password}" />
+        <PasswordBox
+                            x:Name="PasswordBox2"
+                            Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                            VerticalAlignment="Center"
+                            Width="400"
+                            Margin="10"
+                            materialDesign:HintAssist.Hint="{lex:Loc RepeatPassword}" />
+        <Grid HorizontalAlignment="Stretch">
+            <Button 
+                                x:Name="AbortUserButton"
+                                Content="{lex:Loc Abort}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Margin="10"
+                                Background="LightGray"
+                                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                BorderBrush="LightGray"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                Click="AbortUserButton_OnClick"/>
+            <Button 
+                                x:Name="ConfirmUserButton"
+                                Content="{lex:Loc Confirm}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Margin="10"
+                                Click="ConfirmUserButton_OnClick"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

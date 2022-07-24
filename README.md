@@ -1,2 +1,3 @@
-# Database_Experiment_App
-Database_Experiment_App
+# BMW
+
+Rumprobieren mit Ideen für kleine Softwarelösungen um aufwändige Excel/Tabellen lösungen zu ersetzen

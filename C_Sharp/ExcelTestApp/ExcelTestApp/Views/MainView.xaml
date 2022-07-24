@@ -1,0 +1,230 @@
+﻿<UserControl x:Class="ExcelTestApp.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExcelTestApp.Views"
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+             xmlns:utilities="clr-namespace:ExcelTestApp.Utilities"
+             xmlns:controls="clr-namespace:ExcelTestApp.Views.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="NormalTabControlStyle" TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}">
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+                <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.Resources>
+            <utilities:UserRoleIdsToStringConverter x:Key="UserRoleIdsToStringConverter"/>
+            <utilities:DepartmentIdToNameConverter x:Key="DepartmentIdToNameConverter"/>
+        </Grid.Resources>
+        <materialDesign:DialogHost x:Name="MainDialogHost" IsOpen="{Binding IsDialogOpen}" CloseOnClickAway="True">
+        <dragablz:TabablzControl 
+            x:Name="MainTabControl"
+            Margin="0"
+            Style="{DynamicResource NormalTabControlStyle}">
+                <TabItem x:Name="SummaryTab" Header="{lex:Loc ProcurementCalendar}" IsSelected="True">
+                <materialDesign:Card Padding="32" Margin="16">
+                    <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Text="{lex:Loc SummaryDisclaimer}"></TextBlock>
+                </materialDesign:Card>
+            </TabItem>
+            <TabItem x:Name="MyPositionsTab" Header="{lex:Loc MyPositions}" IsSelected="True">
+                <materialDesign:Card Padding="32" Margin="16">
+                        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Text="{lex:Loc MyPositionsDisclaimer}"></TextBlock>
+                </materialDesign:Card>
+            </TabItem>
+                <TabItem x:Name="BackgroundTab" Header="{lex:Loc BackgroundData}">
+                
+                    <ScrollViewer>
+                <StackPanel Orientation="Vertical">
+                    <Expander x:Name="UsersExpander" IsExpanded="True">
+                        <Expander.Header>
+                            <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Text="{lex:Loc Users}" Margin="20"/>
+                        </Expander.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <Expander Header="Filter">
+                                        <StackPanel Orientation="Vertical">
+                                            <controls:Filter x:Name="UserFilter"/>
+                                            <StackPanel x:Name="UserFilterChips" Margin="10" Orientation="Horizontal"/>
+                                        </StackPanel>
+                                    </Expander>
+                                    <Grid>
+                                    <DataGrid
+        x:Name="UsersDataGrid"
+        ItemsSource="{Binding Path=UsersToShow}"  
+        AutoGenerateColumns="False"
+        SelectedValue="{Binding SelectedUser}"
+        SelectionMode="Single"
+        CanUserAddRows="False"
+        CanUserDeleteRows="False"
+        GridLinesVisibility="None"
+        IsReadOnly="True">
+                                        <DataGrid.ContextMenu>
+                                            <ContextMenu StaysOpen="False">
+                                                <MenuItem x:Name="EditUserButton" Header="{lex:Loc Edit}" Click="EditUserButton_OnClick"/>
+                                                <MenuItem x:Name="RemoveUserButton" Header="{lex:Loc Delete}" Click="RemoveUserButton_OnClick"/>
+                                            </ContextMenu>
+                                        </DataGrid.ContextMenu>
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn
+                                x:Name="UserNameColumn"
+                                Header="{lex:Loc UserName}"
+                Binding="{Binding Name}"
+                CanUserSort="True"
+                CanUserReorder="True">
+                                            </DataGridTextColumn>
+                                            <DataGridTextColumn
+                Header="{lex:Loc EMailAddress}"
+                Binding="{Binding Mail}"
+                CanUserSort="True"
+                CanUserReorder="True"/>
+                                            <DataGridTextColumn
+                                Header="{lex:Loc Roles}"
+                                Binding="{Binding RoleIds, Converter={StaticResource UserRoleIdsToStringConverter}}"
+                                CanUserSort="True"
+                                CanUserReorder="True"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                        <Button
+                                            x:Name="AddUserButton"
+                                            Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                            ToolTip="{lex:Loc NewUser}"
+                                            Margin="20"
+                                            VerticalAlignment="Bottom"
+                                            HorizontalAlignment="Right"
+                                            Click="AddUserButton_OnClick">
+                                            <materialDesign:PackIcon
+                                                Kind="Plus"
+                                                Height="22"
+                                                Width="22" />
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                    <Expander x:Name="DepartmentsExpander">
+                        <Expander.Header>
+                            <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Text="{lex:Loc Departments}" Margin="20"/>
+                                </Expander.Header>
+                    <StackPanel Orientation="Vertical">
+                                    <Grid>
+                                        <DataGrid
+                        x:Name="DepartmentsDataGrid"
+                        ItemsSource="{Binding Path=DepartmentsToShow}"  
+                        AutoGenerateColumns="False"
+                        SelectedValue="{Binding SelectedDepartment}"
+                        SelectionMode="Single"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        GridLinesVisibility="None"
+                        IsReadOnly="True">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu StaysOpen="False">
+                                <MenuItem x:Name="EditDepartmentButton" Header="{lex:Loc Edit}" Click="EditDepartmentButton_OnClick"/>
+                                        <MenuItem x:Name="RemoveDepartmentButton" Header="{lex:Loc Delete}" Click="RemoveDepartmentButton_OnClick" IsEnabled="{Binding DeleteDepartmentEnabled}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.Columns>
+                                    <DataGridTextColumn
+                                Header="{lex:Loc Designation}"
+                                Binding="{Binding Name}"
+                                CanUserSort="True"
+                                CanUserReorder="True">
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                    </DataGrid>
+                                        <Button
+                                            x:Name="AddDepartmentButton"
+                                            Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                            ToolTip="{lex:Loc NewDepartment}"
+                                            Margin="20"
+                                            VerticalAlignment="Bottom"
+                                            HorizontalAlignment="Right"
+                                            Click="AddDepartmentButton_OnClick">
+                                            <materialDesign:PackIcon
+                                                Kind="Plus"
+                                                Height="22"
+                                                Width="22" />
+                                        </Button>
+                        </Grid>
+                    </StackPanel>
+                    </Expander>
+                    <Expander x:Name="TplsExpander">
+                        <Expander.Header>
+                            <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Text="{lex:Loc TPLs}" Margin="20"/>
+                                </Expander.Header>
+                        <StackPanel Orientation="Vertical">
+                                    <Grid>
+                                        <DataGrid
+                        x:Name="TplsDataGrid"
+                        ItemsSource="{Binding Path=TplsToShow}"  
+                        AutoGenerateColumns="False"
+                        SelectedValue="{Binding SelectedTpl}"
+                        SelectionMode="Single"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        GridLinesVisibility="None"
+                        IsReadOnly="True">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu StaysOpen="False">
+                                        <MenuItem x:Name="EditTplButton" Header="{lex:Loc Edit}" Click="EditTplButton_OnClick"/>
+                                        <MenuItem x:Name="RemoveTplButton" Header="{lex:Loc Delete}" Click="RemoveTplButton_OnClick"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Header="{lex:Loc Surname}"
+                                Binding="{Binding Surname}"
+                                CanUserSort="True"
+                                CanUserReorder="True">
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                                Header="{lex:Loc Firstname}"
+                                Binding="{Binding Firstname}"
+                                CanUserSort="True"
+                                CanUserReorder="True">
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                                Header="{lex:Loc Department}"
+                                Binding="{Binding Department, Converter={StaticResource DepartmentIdToNameConverter}}"
+                                CanUserSort="True"
+                                CanUserReorder="True">
+                            </DataGridTextColumn>
+                                </DataGrid.Columns>
+                    </DataGrid>
+                                        <Button
+                                            x:Name="AddTplButton"
+                                            Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                            ToolTip="{lex:Loc NewTpl}"
+                                            Margin="20"
+                                            VerticalAlignment="Bottom"
+                                            HorizontalAlignment="Right"
+                                            Click="AddTplButton_OnClick">
+                                            <materialDesign:PackIcon
+                                                Kind="Plus"
+                                                Height="22"
+                                                Width="22" />
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+                    </Expander>
+                            <Grid Height="50"/>
+                        </StackPanel>
+                </ScrollViewer>
+                
+            </TabItem>
+        </dragablz:TabablzControl>
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>
